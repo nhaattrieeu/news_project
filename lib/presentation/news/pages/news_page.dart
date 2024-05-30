@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:news_project/presentation/news/widgets/trending_item_placeholder.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/icons.dart';
@@ -46,7 +47,7 @@ class NewsPage extends StatelessWidget {
                 child: CustomScrollView(
                   slivers: [
                     CupertinoSliverRefreshControl(onRefresh: () {
-                      context.read<NewsCubit>().getTrendingUseCase();
+                      context.read<NewsCubit>().getNewsHomeData();
                       return Future.delayed(const Duration(seconds: 1));
                     }),
                     SliverPadding(
@@ -59,7 +60,10 @@ class NewsPage extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return const Placeholder();
+                                      return CupertinoPageScaffold(
+                                        backgroundColor: kWhiteColor,
+                                        child: Container(),
+                                      );
                                     },
                                   ),
                                 );
@@ -99,7 +103,12 @@ class NewsPage extends StatelessWidget {
                             const Gap(16),
                             BlocBuilder<NewsCubit, NewsState>(
                               builder: (context, state) {
-                                return TrendingItem(trending: state.trending);
+                                if (state is NewsLoaded) {
+                                  return TrendingItem(
+                                      trending: state.newsHome.trending);
+                                } else {
+                                  return const TrendingItemPlaceholder();
+                                }
                               },
                             ),
                           ],
@@ -113,15 +122,20 @@ class NewsPage extends StatelessWidget {
                     ),
                     BlocBuilder<NewsCubit, NewsState>(
                       builder: (context, state) {
-                        return SliverList.separated(
-                          separatorBuilder: (context, index) {
-                            return const Gap(16);
-                          },
-                          itemCount: state.latest.length,
-                          itemBuilder: (context, index) {
-                            return LatestItem(news: state.latest[index]);
-                          },
-                        );
+                        if (state is NewsLoaded) {
+                          return SliverList.separated(
+                            separatorBuilder: (context, index) {
+                              return const Gap(16);
+                            },
+                            itemCount: state.newsHome.latest.length,
+                            itemBuilder: (context, index) {
+                              return LatestItem(
+                                  news: state.newsHome.latest[index]);
+                            },
+                          );
+                        } else {
+                          return const SliverToBoxAdapter();
+                        }
                       },
                     ),
                   ],

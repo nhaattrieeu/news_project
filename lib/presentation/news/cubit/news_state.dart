@@ -1,30 +1,29 @@
 part of 'news_cubit.dart';
 
-enum NewsStatus { initial, loading, success, failure }
+sealed class NewsState extends Equatable {
+  const NewsState();
+}
 
-final class NewsState extends Equatable {
-  final List<News> latest;
-  final News trending;
-  final NewsStatus status;
+final class NewsInitial extends NewsState {
+  @override
+  List<Object> get props => [];
+}
 
-  const NewsState({
-    required this.latest,
-    required this.trending,
-    required this.status,
-  });
+final class NewsLoading extends NewsState {
+  @override
+  List<Object> get props => [];
+}
 
-  NewsState copyWith({
-    List<News>? latest,
-    News? trending,
-    NewsStatus? status,
-  }) {
-    return NewsState(
-      latest: latest ?? this.latest,
-      trending: trending ?? this.trending,
-      status: status ?? this.status,
-    );
-  }
+final class NewsLoaded extends NewsState {
+  final NewsHome newsHome;
+
+  const NewsLoaded(this.newsHome);
 
   @override
-  List<Object> get props => [latest, trending, status];
+  List<Object> get props => [newsHome];
+}
+
+final class NewsError extends NewsState {
+  @override
+  List<Object> get props => [];
 }

@@ -1,39 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:news_project/domain/news/entities/news_home.dart';
 
-import '../../../domain/news/entities/news.dart';
-import '../../../domain/news/usecases/get_news.dart';
-import '../../../domain/news/usecases/get_trending.dart';
+import '../../../domain/news/usecases/get_news_home_usecase.dart';
+
 part 'news_state.dart';
 
 class NewsCubit extends Cubit<NewsState> {
-  final GetNewsUseCase getNewsUseCase;
-  final GetTrendingUseCase getTrendingUseCase;
+  final GetNewsHomeUseCase _getNewsHomeUseCase;
 
-  NewsCubit({
-    required this.getNewsUseCase,
-    required this.getTrendingUseCase,
-  }) : super(const NewsState(
-          latest: [],
-          trending: News.empty,
-          status: NewsStatus.initial,
-        ));
+  NewsCubit(this._getNewsHomeUseCase) : super(NewsInitial());
 
-  Future<void> getNewsData() async {
-    final failureOrData = await getNewsUseCase();
+  void getNewsHomeData() async {
+    final failureOrData = await _getNewsHomeUseCase();
     failureOrData.fold(
-      (failure) => print(failure),
-      (data) {
-        emit(state.copyWith(latest: data));
-      },
-    );
-  }
-
-  Future<void> getTrendingData() async {
-    final failureOrData = await getTrendingUseCase();
-    failureOrData.fold(
-      (failure) => print(failure),
-      (data) => emit(state.copyWith(trending: data)),
+      (failure) => emit(NewsError()),
+      (data) => emit(NewsLoaded(data)),
     );
   }
 }

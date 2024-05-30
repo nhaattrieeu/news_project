@@ -17,19 +17,6 @@ class News extends Equatable {
     required this.author,
   });
 
-  static const empty = News(
-    id: "",
-    title: "",
-    image: "",
-    createdAt: 0,
-    author: Author(
-      id: "",
-      username: "",
-      fullName: "",
-      avatar: "",
-    ),
-  );
-
   @override
   List<Object> get props => [id, title, image, createdAt, author];
 }

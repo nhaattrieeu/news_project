@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:news_project/domain/news/entities/news_home.dart';
 
 import '../../../../core/error/failures.dart';
-import '../entities/news.dart';
 
 abstract class NewsRepository {
-  Future<Either<Failure, List<News>>> getNews();
-
-  Future<Either<Failure, News>> getTrending();
+  Future<Either<Failure, NewsHome>> getNewsHome();
 }
