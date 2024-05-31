@@ -20,8 +20,9 @@ class NewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<NewsCubit>().getNewsHomeData();
+
     return CupertinoPageScaffold(
-      backgroundColor: kWhiteColor,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),

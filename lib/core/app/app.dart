@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_project/presentation/explore/cubit/explore_cubit.dart';
 import 'package:news_project/presentation/home/pages/home_page.dart';
 
 import '../../di/di.dart';
@@ -16,10 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => NewsCubit(sl())..getNewsHomeData(),
-        ),
+        BlocProvider(create: (context) => NewsCubit(sl())),
         BlocProvider(create: (context) => NewsDetailCubit(sl())),
+        BlocProvider(create: (context) => ExploreCubit(sl())),
       ],
       child: CupertinoApp(
         theme: CupertinoThemeData(

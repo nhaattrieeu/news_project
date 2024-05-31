@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:news_project/presentation/explore/pages/explore_page.dart';
 import 'package:news_project/presentation/news/pages/news_page.dart';
 
 import '../../../core/constants/colors.dart';
@@ -41,6 +42,8 @@ class HomePage extends StatelessWidget {
       tabBuilder: (context, index) {
         if (index == 0) {
           return const NewsPage();
+        } else if (index == 1) {
+          return const ExplorePage();
         } else {
           return const Placeholder();
         }
